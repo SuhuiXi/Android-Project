@@ -70,7 +70,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             @Override
             public void onClick(View v) {
                 //6 is my request code:
-                MainActivity.this.startActivityForResult( new Intent(MainActivity.this, SecondActivity.class ) , 6 );
+                MainActivity.this.startActivityForResult( new Intent(MainActivity.this, ListActivity.class ) , 6 );
             }
         });
 
