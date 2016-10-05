@@ -23,18 +23,32 @@ import android.widget.TextView;
 
 public class ListActivity extends Activity {
 
+    private boolean recycleViews;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_layout);
 
-    ListView theList = (ListView) findViewById(R.id.thelist);
-    String[] arr = {"Sting 1", "String 2", "String 3"};
+        ListView theList = (ListView) findViewById(R.id.thelist);
+        final Button listButton = (Button)findViewById(R.id.listButton);
+        recycleViews = false;
 
-   // ArrayAdapter<String> myList = new ArrayAdapter<String>(this, R.layout.list_layout, arr);
+        listButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recycleViews = ! recycleViews;
+                if(recycleViews){
+                    listButton.setText("Re-initialize views On");
+                }
+                else
+                    listButton.setText("Re-initialize views off");
+            }
+        });
 
-    theList.setAdapter(new MyAdapter( this ));
-    //Show a message at the "Debug" logging level
-    Log.d("ListActivity", "IN OnCreate()");
+
+        theList.setAdapter(new MyAdapter( this ));
+        //Show a message at the "Debug" logging level
+        Log.d("ListActivity", "In OnCreate()");
 
     }
 
@@ -50,18 +64,17 @@ public class ListActivity extends Activity {
         public View getView(int position, View convertView, ViewGroup parent) {
 
 
-            View inflated =null;
-            if(convertView == null) {
+            View inflated = convertView;
+
+            if(inflated == null) {
                 inflated = getLayoutInflater().inflate(R.layout.inner_cell_layout, null);
-
-            }
-            else {
-                inflated = convertView;
             }
 
-            TextView tv = (TextView)inflated.findViewById(R.id.stringlocation);
-            String myMessage = getItem( position );
-            tv.setText( myMessage);
+            if(recycleViews) {
+                TextView tv = (TextView) inflated.findViewById(R.id.stringlocation);
+                String myMessage = getItem(position);
+                tv.setText(myMessage);
+            }
 
             return inflated;
         }
