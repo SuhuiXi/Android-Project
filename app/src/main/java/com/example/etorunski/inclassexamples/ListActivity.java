@@ -38,10 +38,10 @@ public class ListActivity extends Activity {
             public void onClick(View v) {
                 recycleViews = ! recycleViews;
                 if(recycleViews){
-                    listButton.setText("Re-initialize views On");
+                    listButton.setText( R.string.initialize_on );
                 }
                 else
-                    listButton.setText("Re-initialize views off");
+                    listButton.setText( R.string.initialize_off );
             }
         });
 
