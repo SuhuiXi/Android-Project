@@ -20,7 +20,7 @@ static final public String TABLENAME = "PRICES";
 
     public void onCreate(SQLiteDatabase db){
         db.execSQL("CREATE TABLE " + TABLENAME +
-                " ( IDS INTEGER PRIMARY KEY, NAME text, PRICE INTEGER);"  );
+                " ( IDS INTEGER AUTOINCREMENT PRIMARY KEY, NAME text, PRICE INTEGER);"  );
 
     }
 

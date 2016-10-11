@@ -1,6 +1,7 @@
 package com.example.etorunski.inclassexamples;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,7 +36,7 @@ protected SQLiteDatabase db;
         MyDatabaseHelper dbHelper = new MyDatabaseHelper( this );
         db = dbHelper.getWritableDatabase();
 
-        ListView theList = (ListView) findViewById(R.id.thelist);
+        final ListView theList = (ListView) findViewById(R.id.thelist);
         final Button listButton = (Button)findViewById(R.id.listButton);
         recycleViews = false;
 
@@ -44,6 +45,45 @@ protected SQLiteDatabase db;
             public void onClick(View v) {
                 recycleViews = ! recycleViews;
                 if(recycleViews){
+                    ContentValues newValues = new ContentValues();
+                    newValues.put("Price", 6);
+                    newValues.put("Name", "Something");
+
+
+                    db.insert(MyDatabaseHelper.TABLENAME, "MISSING DATA", newValues);
+
+              Cursor results1 =      db.query(MyDatabaseHelper.TABLENAME, new String[] {"Price" },
+                            "? < ?", new String[] {"Price", "7", "ignore", "ignore"},
+                            null, null, null, null);
+String columnNames [] =results1.getColumnNames(); // String[] { "Price" };
+
+                    for(String colName : columnNames)
+                    {
+                        System.out.println("Name: " + colName);
+                    }
+theList.setAdapter(
+        SimpleCursorAdapter (ListActivity.this, R.layout.inner_cell_layout,results1,
+                new String[]{"Price", "Name"},
+                new int[] {R.id.stringlocation, R.id.stringnames},0)
+
+
+                    );
+Cursor results2 = db.rawQuery("Select * from PRICES where Price < 7", null);
+results2.getColumnNames(); // IDS, Price, Name
+
+                    results1.moveToFirst();
+                    int priceCOlumnIndex = results1.getColumnIndex("Price");
+                    int nameCOlumnIndex = results1.getColumnIndex("Name");
+
+                    while(!results1.isAfterLast())
+                    {
+                        String thisName = results1.getString(nameCOlumnIndex);
+                        int thisPrice = results1.getInt(nameCOlumnIndex);
+                    }
+
+
+                    int numResults = results2.getCount(); //number of matches
+
                     listButton.setText( R.string.initialize_on );
                 }
                 else
