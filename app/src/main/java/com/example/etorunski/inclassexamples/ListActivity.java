@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,10 +25,15 @@ import android.widget.TextView;
 public class ListActivity extends Activity {
 
     private boolean recycleViews;
+protected SQLiteDatabase db;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_layout);
+
+
+        MyDatabaseHelper dbHelper = new MyDatabaseHelper( this );
+        db = dbHelper.getWritableDatabase();
 
         ListView theList = (ListView) findViewById(R.id.thelist);
         final Button listButton = (Button)findViewById(R.id.listButton);
