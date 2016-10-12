@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 static final protected String DATABASE_NAME = "ADatabase.db";
-    static final int VERSION_NUM = 1;
+    static final int VERSION_NUM = 2;
 static final public String TABLENAME = "PRICES";
     public MyDatabaseHelper(Context ctx)
     {
@@ -20,7 +20,7 @@ static final public String TABLENAME = "PRICES";
 
     public void onCreate(SQLiteDatabase db){
         db.execSQL("CREATE TABLE " + TABLENAME +
-                " ( IDS INTEGER AUTOINCREMENT PRIMARY KEY, NAME text, PRICE INTEGER);"  );
+                " ( _id INTEGER PRIMARY KEY AUTOINCREMENT, NAME text, PRICE INTEGER);"  );
 
     }
 

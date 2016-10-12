@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,15 +27,13 @@ import android.widget.TextView;
 public class ListActivity extends Activity {
 
     private boolean recycleViews;
-protected SQLiteDatabase db;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_layout);
 
 
-        MyDatabaseHelper dbHelper = new MyDatabaseHelper( this );
-        db = dbHelper.getWritableDatabase();
 
         final ListView theList = (ListView) findViewById(R.id.thelist);
         final Button listButton = (Button)findViewById(R.id.listButton);
@@ -45,45 +44,6 @@ protected SQLiteDatabase db;
             public void onClick(View v) {
                 recycleViews = ! recycleViews;
                 if(recycleViews){
-                    ContentValues newValues = new ContentValues();
-                    newValues.put("Price", 6);
-                    newValues.put("Name", "Something");
-
-
-                    db.insert(MyDatabaseHelper.TABLENAME, "MISSING DATA", newValues);
-
-              Cursor results1 =      db.query(MyDatabaseHelper.TABLENAME, new String[] {"Price" },
-                            "? < ?", new String[] {"Price", "7", "ignore", "ignore"},
-                            null, null, null, null);
-String columnNames [] =results1.getColumnNames(); // String[] { "Price" };
-
-                    for(String colName : columnNames)
-                    {
-                        System.out.println("Name: " + colName);
-                    }
-theList.setAdapter(
-        SimpleCursorAdapter (ListActivity.this, R.layout.inner_cell_layout,results1,
-                new String[]{"Price", "Name"},
-                new int[] {R.id.stringlocation, R.id.stringnames},0)
-
-
-                    );
-Cursor results2 = db.rawQuery("Select * from PRICES where Price < 7", null);
-results2.getColumnNames(); // IDS, Price, Name
-
-                    results1.moveToFirst();
-                    int priceCOlumnIndex = results1.getColumnIndex("Price");
-                    int nameCOlumnIndex = results1.getColumnIndex("Name");
-
-                    while(!results1.isAfterLast())
-                    {
-                        String thisName = results1.getString(nameCOlumnIndex);
-                        int thisPrice = results1.getInt(nameCOlumnIndex);
-                    }
-
-
-                    int numResults = results2.getCount(); //number of matches
-
                     listButton.setText( R.string.initialize_on );
                 }
                 else
@@ -91,7 +51,12 @@ results2.getColumnNames(); // IDS, Price, Name
             }
         });
 
-
+theList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.d("Clicked", "Position "+ position + " id:" + id);
+    }
+});
         theList.setAdapter(new MyAdapter( this ));
         //Show a message at the "Debug" logging level
         Log.d("ListActivity", "In OnCreate()");

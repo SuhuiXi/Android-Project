@@ -36,7 +36,7 @@ public class MainActivity extends Activity {
     final static int REQUEST_LIST = 4;
 
     //An array of strings for the listview.
-    String listItems [] = { "Vibrate phone", "Show Sensors", "Second Activity", "List Activity", "Send Email", "Toggle flash"};
+    String listItems [] = { "Vibrate phone", "Show Sensors", "Second Activity", "List Activity", "Send Email", "Toggle flash", "Cursor database"};
 
 
     //the flash. You have to give your app permissions to use the camera through settings:
@@ -120,6 +120,9 @@ public class MainActivity extends Activity {
 
                     case 5: //Turn on flash
                         toggleFlash();
+                        break;
+                    case 6:
+                        MainActivity.this.startActivityForResult( new Intent(MainActivity.this, CursorListActivity.class ) , 5 );
                         break;
                 }
             }
