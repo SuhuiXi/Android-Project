@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import 	android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
@@ -51,17 +52,19 @@ public class ListActivity extends Activity {
             }
         });
 
-theList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.d("Clicked", "Position "+ position + " id:" + id);
-    }
-});
+        theList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.d("Clicked", "Position "+ position + " id:" + id);
+        }
+    });
         theList.setAdapter(new MyAdapter( this ));
         //Show a message at the "Debug" logging level
         Log.d("ListActivity", "In OnCreate()");
 
     }
+
 
     private class MyAdapter extends ArrayAdapter<String>
     {
@@ -94,6 +97,10 @@ theList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             return 400;
         }
 
+        //Needed for the
+        public long getItemId(int position) { return position;}
+
+
         public String getItem(int position){
             switch (position)
             {
@@ -109,6 +116,4 @@ theList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             return "Out of range" + position;
         }
     }
-
-
 }

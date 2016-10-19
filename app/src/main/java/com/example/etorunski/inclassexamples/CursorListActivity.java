@@ -54,6 +54,10 @@ public class CursorListActivity extends Activity {
                         "PRICE < ?", new String[] {" 30" },
                         null, null, null, null);
 
+
+                //Same query but as rawQuery:
+                Cursor results2=   db.rawQuery("select _id, PRICE, NAME from PRICES where PRICE < ?", new String[] { "30"});
+
                 String columnNames[] = results1.getColumnNames();
 
                 for (String colName : columnNames) {
@@ -66,8 +70,6 @@ public class CursorListActivity extends Activity {
                                 new int[]{R.id.stringlocation, R.id.stringnames}, 0));
 
 
-                Cursor results2 = db.rawQuery("Select * from PRICES where PRICE < 7", null);
-                results2.getColumnNames(); // IDS, Price, Name
 
                 results1.moveToFirst();
                 int priceColumnIndex = results1.getColumnIndex("PRICE");
@@ -81,6 +83,9 @@ public class CursorListActivity extends Activity {
 
                     results1.moveToNext(); //move the cursor to the next row
                 }
+                 results2 = db.rawQuery("select PRICE, NAME from PRICES where _id > ?", new String[] { "40"});
+
+                results2.getColumnNames(); // IDS, Price, Name
 
                 int numResults = results2.getCount(); //number of matching rows
 
