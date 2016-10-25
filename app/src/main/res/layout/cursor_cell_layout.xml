@@ -22,11 +22,5 @@
         android:textSize="24sp"
         android:textStyle="bold|italic" />
 
-    <CheckBox
-        android:text="CheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/checkBox2"
-        android:layout_weight="1" />
 
 </LinearLayout>
