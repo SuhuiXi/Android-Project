@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -19,6 +21,7 @@ import java.net.URL;
 
 public class XMLParsing extends Activity {
     TextView first, second, third;
+ProgressBar pBar ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,10 @@ public class XMLParsing extends Activity {
         first = (TextView)findViewById(R.id.first_text_field);
         second = (TextView)findViewById(R.id.second_text_field);
         third = (TextView)findViewById(R.id.third_text_field);
+        
+        pBar = (ProgressBar)findViewById(R.id.progressBar);
+        pBar.setVisibility(View.INVISIBLE);
+
 
         try{
 
