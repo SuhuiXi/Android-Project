@@ -1,6 +1,7 @@
 package com.example.etorunski.inclassexamples;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -28,7 +29,8 @@ public class XMLParsing extends Activity {
         second = (TextView)findViewById(R.id.second_text_field);
         third = (TextView)findViewById(R.id.third_text_field);
 
-        try {
+        try{
+
             URL url = new URL("http://torunski.ca/CST2335_XML.xml");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             InputStream istream = urlConnection.getInputStream();
@@ -39,9 +41,10 @@ public class XMLParsing extends Activity {
 
             xpp.setInput(istream, "UTF8");
             boolean finished = false;
+            int type = XmlPullParser.START_DOCUMENT;
 
-            while(!finished) {
-                int type = xpp.getEventType();
+            while(type != XmlPullParser.END_DOCUMENT) {
+
                 switch (type) {
                     case XmlPullParser.START_DOCUMENT:
                         break;
@@ -49,8 +52,9 @@ public class XMLParsing extends Activity {
                         finished = true;
                         break;
                     case XmlPullParser.START_TAG:
-                        if (xpp.getName().equals("HelloWorld")) {
-                            xpp.getAttributeValue(null, "AnAttribute");
+                        String name = xpp.getName();
+                        if (name.equals("AMessage")) {
+                            String message = xpp.getAttributeValue(null, "message");
                         }
                         break;
                     case XmlPullParser.END_TAG:
@@ -58,7 +62,7 @@ public class XMLParsing extends Activity {
                     case XmlPullParser.TEXT:
                         break;
                 }
-                xpp.next();
+                type = xpp.next();
             }
         }
         catch(Exception e)
@@ -66,4 +70,53 @@ public class XMLParsing extends Activity {
             Log.e("XML PARSING", e.getMessage());
         }
     }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+    private class AsyncXML extends AsyncTask<String, String, Void>
+    {
+        private int state ;
+
+        public Void doInBackground(String ...params)
+        {
+        }
+
+        public void onProgressUpdate(String ... args)
+        {
+        }
+
+        public void onPostExecute(Void vd)
+        {
+
+        }
+    }
+ */
