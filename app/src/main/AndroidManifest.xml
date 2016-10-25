@@ -23,6 +23,7 @@
         <activity android:name=".ListActivity"/>
         <activity android:name=".SensorActivity"/>
         <activity android:name=".CursorListActivity"></activity>
+        <activity android:name=".XMLParsing"/>
     </application>
 
     <uses-permission android:name="android.permission.CAMERA" />

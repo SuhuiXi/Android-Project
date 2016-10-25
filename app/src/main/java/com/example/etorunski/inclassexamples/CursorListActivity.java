@@ -51,7 +51,7 @@ public class CursorListActivity extends Activity {
 
                 //Only want results where price is less than 30, for example:
                 Cursor results1 = db.query(MyDatabaseHelper.TABLENAME, new String[]{"_id", "PRICE", "NAME"},
-                        "PRICE < ?", new String[] {" 30" },
+                        "PRICE < ?", new String[] {" 40" },
                         null, null, null, null);
 
 
