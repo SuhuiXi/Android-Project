@@ -31,7 +31,8 @@ ProgressBar pBar ;
         first = (TextView)findViewById(R.id.first_text_field);
         second = (TextView)findViewById(R.id.second_text_field);
         third = (TextView)findViewById(R.id.third_text_field);
-        
+
+
         pBar = (ProgressBar)findViewById(R.id.progressBar);
         pBar.setVisibility(View.INVISIBLE);
 
