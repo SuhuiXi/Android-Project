@@ -34,48 +34,88 @@ ProgressBar pBar ;
 
 
         pBar = (ProgressBar)findViewById(R.id.progressBar);
-        pBar.setVisibility(View.INVISIBLE);
+
+        pBar.setMax(3);
+        pBar.setVisibility(View.VISIBLE);
+        new NetworkAsyncTask() .execute("http://torunski.ca/CST2335_XML.xml");
+
+    }
 
 
-        try{
-
-            URL url = new URL("http://torunski.ca/CST2335_XML.xml");
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            InputStream istream = urlConnection.getInputStream();
-
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            factory.setNamespaceAware(false);
-            XmlPullParser xpp = factory.newPullParser();
-
-            xpp.setInput(istream, "UTF8");
-            boolean finished = false;
-            int type = XmlPullParser.START_DOCUMENT;
-
-            while(type != XmlPullParser.END_DOCUMENT) {
-
-                switch (type) {
-                    case XmlPullParser.START_DOCUMENT:
-                        break;
-                    case XmlPullParser.END_DOCUMENT:
-                        finished = true;
-                        break;
-                    case XmlPullParser.START_TAG:
-                        String name = xpp.getName();
-                        if (name.equals("AMessage")) {
-                            String message = xpp.getAttributeValue(null, "message");
-                        }
-                        break;
-                    case XmlPullParser.END_TAG:
-                        break;
-                    case XmlPullParser.TEXT:
-                        break;
-                }
-                type = xpp.next();
-            }
-        }
-        catch(Exception e)
+    public class NetworkAsyncTask extends AsyncTask<String, String, Void >
+    {
+        public Void doInBackground(String ... args)
         {
-            Log.e("XML PARSING", e.getMessage());
+            state = 0;
+
+
+            try{
+
+                URL url = new URL(args[0]);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                InputStream istream = urlConnection.getInputStream();
+
+                XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+                factory.setNamespaceAware(false);
+                XmlPullParser xpp = factory.newPullParser();
+
+                xpp.setInput(istream, "UTF8");
+                boolean finished = false;
+                int type = XmlPullParser.START_DOCUMENT;
+
+                while(type != XmlPullParser.END_DOCUMENT) {
+
+                    switch (type) {
+                        case XmlPullParser.START_DOCUMENT:
+                            break;
+                        case XmlPullParser.END_DOCUMENT:
+                            finished = true;
+                            break;
+                        case XmlPullParser.START_TAG:
+                            String name = xpp.getName();
+                            if (name.equals("AMessage")) {
+                                String message = xpp.getAttributeValue(null, "message");
+
+                                publishProgress( message );
+                            }
+                            break;
+                        case XmlPullParser.END_TAG:
+                            break;
+                        case XmlPullParser.TEXT:
+                            break;
+                    }
+                    type = xpp.next(); //advances to next xml event
+                }
+            }
+            catch(Exception e)
+            {
+                Log.e("XML PARSING", e.getMessage());
+            }
+
+            return null;
+        }
+        private int state;
+
+        public void onProgressUpdate(String ...updateInfo)
+        {
+            switch(state ++)
+            {
+                case 0:
+                    first.setText(updateInfo[0]);
+                    break;
+                case 1:
+                    second.setText(updateInfo[0]);
+                    break;
+                case 2:
+                    third.setText(updateInfo[0]);
+                    break;
+            }
+            pBar.setProgress( state );
+        }
+
+        public void onPostExecute(Void vd)
+        {
+             pBar.setVisibility(View.INVISIBLE);
         }
     }
 
