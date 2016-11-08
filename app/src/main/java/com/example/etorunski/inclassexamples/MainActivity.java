@@ -36,7 +36,7 @@ public class MainActivity extends Activity {
     final static int REQUEST_LIST = 4;
 
     //An array of strings for the listview.
-    String listItems [] = { "Vibrate phone", "Show Sensors", "Second Activity", "List Activity", "Send Email", "Toggle flash", "Cursor database", "AsyncTask & XML"};
+    String listItems [] = { "Vibrate phone", "Show Sensors", "Second Activity", "List Activity", "Send Email", "Toggle flash", "Cursor database", "AsyncTask & XML", "Fragments"};
 
 
     //the flash. You have to give your app permissions to use the camera through settings:
@@ -126,6 +126,9 @@ public class MainActivity extends Activity {
                         break;
                     case 7:
                         MainActivity.this.startActivity(new Intent(MainActivity.this, XMLParsing.class));
+                        break;
+                    case 8:
+                        MainActivity.this.startActivity(new Intent(MainActivity.this, fragmentActivity.class));
                         break;
                 }
             }

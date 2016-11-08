@@ -20,8 +20,11 @@ import java.net.URL;
  */
 
 public class XMLParsing extends Activity {
-    TextView first, second, third;
-ProgressBar pBar ;
+
+    protected TextView first, second, third;
+    protected ProgressBar pBar ;
+    protected final static String ACTIVITY_NAME = "XMLParsing";
+    private int state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,42 +49,61 @@ ProgressBar pBar ;
     {
         public Void doInBackground(String ... args)
         {
+            //State is used for counting how many times we update the GUI
             state = 0;
 
-
             try{
-
+                //Create a URL object to download
                 URL url = new URL(args[0]);
+
+                //Connect to a server and get an inputStream to read data
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 InputStream istream = urlConnection.getInputStream();
 
+                //Create an XMLPullParser object:
                 XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                 factory.setNamespaceAware(false);
                 XmlPullParser xpp = factory.newPullParser();
 
+                //Give the inputStream to the pull parser to read the XML document
                 xpp.setInput(istream, "UTF8");
-                boolean finished = false;
+
+                //Setting up a while loop to iterate over the XML tags. The
+                //parser is initially at the start of the document:
                 int type = XmlPullParser.START_DOCUMENT;
 
                 while(type != XmlPullParser.END_DOCUMENT) {
 
                     switch (type) {
+                        //If the current XML event is the start of the document
                         case XmlPullParser.START_DOCUMENT:
+                            Log.d(ACTIVITY_NAME, "XML Start document");
                             break;
+
+                        //If the current XML event is the end of the document
                         case XmlPullParser.END_DOCUMENT:
-                            finished = true;
+                            Log.d(ACTIVITY_NAME, "XML End document");
                             break;
+
+                        //If the current XML event is an opening tag
                         case XmlPullParser.START_TAG:
                             String name = xpp.getName();
+                            Log.d(ACTIVITY_NAME, "XML Start tag:" + name);
+
                             if (name.equals("AMessage")) {
                                 String message = xpp.getAttributeValue(null, "message");
-
                                 publishProgress( message );
                             }
                             break;
+
+                        //If the current XML event is an closing tag
                         case XmlPullParser.END_TAG:
+                            Log.d(ACTIVITY_NAME, "XML End tag:"+xpp.getName());
                             break;
+
+                        //If the current XML event text between opening and closing tags
                         case XmlPullParser.TEXT:
+                            Log.d(ACTIVITY_NAME, "XML text:" + xpp.getText());
                             break;
                     }
                     type = xpp.next(); //advances to next xml event
@@ -89,15 +111,17 @@ ProgressBar pBar ;
             }
             catch(Exception e)
             {
-                Log.e("XML PARSING", e.getMessage());
+                Log.e("XML PARSING Exception:", e.getMessage());
             }
 
             return null;
         }
-        private int state;
+
 
         public void onProgressUpdate(String ...updateInfo)
         {
+            //Update different parts of the GUI depending on the current state
+            //This is the state pattern:
             switch(state ++)
             {
                 case 0:
@@ -113,6 +137,8 @@ ProgressBar pBar ;
             pBar.setProgress( state );
         }
 
+
+        //After parsing the XML, hide the progress bar
         public void onPostExecute(Void vd)
         {
              pBar.setVisibility(View.INVISIBLE);
